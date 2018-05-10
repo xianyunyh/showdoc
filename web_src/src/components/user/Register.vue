@@ -6,16 +6,16 @@
           <el-card class="center-card">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm"  status-icon  label-width="0px" class="demo-ruleForm">
               <h2>{{$t("register")}}</h2>
-              <el-form-item label="" >
+              <el-form-item label="" prop="username" >
                 <el-input type="text" auto-complete="off" :placeholder="$t('username_description')" v-model="ruleForm.username"></el-input>
               </el-form-item>
 
-              <el-form-item label="" >
+              <el-form-item label="" prop="password" >
                 <el-input type="password" auto-complete="off" v-model="ruleForm.password" :placeholder="$t('password')"></el-input>
               </el-form-item>
 
-              <el-form-item label="" >
-                <el-input type="password" auto-complete="off" v-model="confirm_password" :placeholder="$t('password_again')"></el-input>
+              <el-form-item label="" prop="confirm_password" >
+                <el-input type="password" auto-complete="off" v-model="ruleForm.confirm_password" :placeholder="$t('password_again')"></el-input>
               </el-form-item>
 
               <el-form-item label="" >
@@ -25,7 +25,8 @@
               </el-form-item>
 
                <el-form-item label="" >
-                <el-button type="submit" style="width:100%;" @click="onSubmit('ruleForm')" >{{$t("register")}}</el-button>
+                 <el-button type="primary" @click="submitForm('ruleForm')">{{$t("register")}}</el-button>
+
               </el-form-item>
 
               <el-form-item label="" >
@@ -50,27 +51,33 @@ export default {
   },
   data () {
     return {
-      username: '',
-      password: '',
-      confirm_password:'',
+
       v_code: '',
-      v_code_img:DocConfig.server+'/api/common/verify',
+      v_code_img:DocConfig.server+'/api/Verifycode/index',
       ruleForm: {
           username: '',
+          password: '',
+          confirm_password:'',
         },
       rules: {
           username: [
-            { required: true, message: '请输入活动名称', trigger: 'blur' },
+              { required: true, message: '请输入用户名', trigger: 'blur' },
+          ],
+          password:[
+              { required: true, message: '请输入密码', trigger: 'blur' },
+          ],
+          confirm_password:[
+              { required: true, message: '请输入确认密码', trigger: 'blur' },
           ]
         }
     }
 
   },
   methods: {
-      onSubmit(formName) {
+      submitForm(formName) {
         
         this.$refs[formName].validate((valid) => {
-
+          console.log(valid)
          if(!valid) {
            console.log('error submit!!');
             return false;

@@ -12,8 +12,3 @@ use think\facade\Route;
 Route::group('api', function () {
     Route::post('user/register', 'api/user/register')->validate('app\api\validate\UserValidate','register');
 })->middleware('Api')->allowCrossDomain();
-
-Route::get('/index',function(){
-   $cron = new \app\api\behavior\CronRun();
-   var_dump(get_class_methods($cron));
-});
