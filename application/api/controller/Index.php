@@ -5,6 +5,6 @@ class Index
 {
     public function index()
     {
-        var_dump('111');
+
     }
 }

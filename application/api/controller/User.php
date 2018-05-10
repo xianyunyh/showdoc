@@ -15,8 +15,10 @@ class User extends Base {
 
     public function register (Request $request)
     {
-        $validate = new UserValidate();
-        $res      = $validate->scene('login')->check($request->get());
+        $data = $request->post();
+
+        return $this->returnSuccess($data);
+
 
     }
 

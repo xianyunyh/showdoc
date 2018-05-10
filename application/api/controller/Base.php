@@ -27,8 +27,7 @@ class Base extends Controller {
             'msg'       => $msg,
             'data'      => $data
         ];
-        $header = config("app.cors_header");
-        return json($result)->header($header);
+        return json($result);
     }
 
 
@@ -39,7 +38,6 @@ class Base extends Controller {
             'errorCode' => $code,
             'msg'       => $msg,
         ];
-        $header = config("app.cors_header");
-        return json($result)->header($header);
+        return json($result);
     }
 }

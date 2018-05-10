@@ -70,7 +70,7 @@ export default {
       onSubmit(formName) {
         
         this.$refs[formName].validate((valid) => {
-          console.log(valid)
+
          if(!valid) {
            console.log('error submit!!');
             return false;
@@ -79,8 +79,8 @@ export default {
           var url = DocConfig.server+'/api/user/register';
 
           var params = new URLSearchParams();
-          params.append('username', this.username);
-          params.append('password', this.password);
+          params.append('username', this.ruleForm.username);
+          params.append('password', this.ruleForm.password);
           params.append('confirm_password', this.confirm_password);
           params.append('v_code', this.v_code);
 
