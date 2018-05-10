@@ -15,11 +15,11 @@ class Base extends Controller {
 
     /**
      * 返回json
-     * @param void       $data
+     * @param        $data
      * @param string     $msg
      * @return \think\response\Json
      */
-    public function returnSuccess ($data, $msg = "ok")
+    public function success ($data, $msg = "ok")
     {
         $result = [
             'status'    => 1,
@@ -31,7 +31,7 @@ class Base extends Controller {
     }
 
 
-    public function returnError($msg,$code='-1')
+    public function error($msg,$code='-1')
     {
         $result = [
             'status'    => 0,
