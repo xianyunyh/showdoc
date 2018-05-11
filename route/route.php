@@ -9,6 +9,13 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 use think\facade\Route;
-Route::group('api', function () {
+
+$header = config('app.cors_header');
+
+Route::group('api', function ()  {
+    //注册接口
     Route::post('user/register', 'api/user/register')->validate('app\api\validate\UserValidate','register');
-})->middleware('Api')->allowCrossDomain();
+    //登录接口
+    Route::post('user/login', 'api/user/login')->validate('app\api\validate\UserValidate','login');
+
+})->middleware('Api')->header($header)->allowCrossDomain();

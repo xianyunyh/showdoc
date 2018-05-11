@@ -135,7 +135,7 @@ export default {
 
           that.axios.post(url, params)
             .then(function (response) {
-              if (response.data.error_code === 0 ) {
+              if (response.data.status === 1 ) {
                 that.$alert(that.$t("update_email_success"));
                 this.get_user_info();
               }else{

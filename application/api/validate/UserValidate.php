@@ -24,10 +24,13 @@ class UserValidate extends Validate {
         'register' => [
             'username',
             'password'
-        ],
-        'login'    => [
-            'username',
-            'password'
         ]
     ];
+
+    // Login 验证场景定义
+    public function sceneLogin()
+    {
+        return $this->only(['username','password'])
+            ->remove('username', 'unique');
+    }
 }

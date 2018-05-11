@@ -6,12 +6,12 @@
           <el-card class="center-card">
             <el-form  status-icon  label-width="0px" class="demo-ruleForm"  :model="ruleForm" :rules="rules" ref="ruleForm">
               <h2>{{$t("login")}}</h2>
-              <el-form-item label="" >
-                <el-input type="text" auto-complete="off" :placeholder="$t('username_description')" v-model="username"></el-input>
+              <el-form-item label="" prop="username" >
+                <el-input type="text" auto-complete="off" :placeholder="$t('username_description')" v-model="ruleForm.username"></el-input>
               </el-form-item>
 
-              <el-form-item label="" >
-                <el-input type="password" auto-complete="off" v-model="password" :placeholder="$t('password')"></el-input>
+              <el-form-item label="" prop="password" >
+                <el-input type="password" auto-complete="off" v-model="ruleForm.password" :placeholder="$t('password')"></el-input>
               </el-form-item>
 
               <el-form-item label="" v-if="show_v_code">
@@ -21,13 +21,11 @@
               </el-form-item>
 
                <el-form-item label="" >
-                <el-button type="primary" style="width:100%;" @click="onSubmit" >{{$t("login")}}</el-button>
+                <el-button type="primary" style="width:100%;" @click="onSubmit('ruleForm')" >{{$t("login")}}</el-button>
               </el-form-item>
 
               <el-form-item label="" >
                   <router-link to="/user/register">{{$t("register_new_account")}}</router-link>
-                  &nbsp;&nbsp;&nbsp;
-
               </el-form-item>
             </el-form>
           </el-card>
@@ -39,7 +37,7 @@
 </template>
 
 <script>
-
+import {test} from '../../api/api'
 
 export default {
   name: 'Login',
@@ -48,18 +46,19 @@ export default {
   },
   data () {
     return {
-      username: '',
-      password: '',
       v_code: '',
       v_code_img:DocConfig.server+'/api/common/verify',
       show_v_code:false,
+      ruleForm:{
+        username: '',
+        password: '',
+      },
         rules: {
-            name: [
-                { required: true, message: '请输入活动名称', trigger: 'blur' },
-                { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+            username: [
+                { required: true, message: '请输入用户名', trigger: 'blur' },
             ],
-            region: [
-                { required: true, message: '请选择活动区域', trigger: 'change' }
+            password: [
+                { required: true, message: '请输入密码', trigger: 'change' }
             ]
         }
     }
@@ -72,32 +71,34 @@ export default {
                   console.log('error submit!!');
                   return false;
               }
+              var that = this ;
+              var url = DocConfig.server+'/api/user/login';
+              var params = new URLSearchParams();
+              params.append('username', this.ruleForm.username);
+              params.append('password', this.ruleForm.password);
+              params.append('v_code', this.v_code);
+
+              that.axios.post(url, params)
+                .then(function (response) {
+                  console.log(response.data)
+                  if (response.data.status === 1 ) {
+                    
+                    //that.$message.success("登录成功");
+                    let redirect = decodeURIComponent(that.$route.query.redirect || '/item/index');
+                    that.$router.replace({
+                      path: redirect
+                    });
+                  }else{
+                    if (response.data.status === 0 ) {
+                        that.$alert(response.data.msg);
+                    };
+                    that.$alert(response.data.msg);
+                  }
+                  
+                });
           });
           
-          var that = this ;
-          var url = DocConfig.server+'/api/user/login';
-          var params = new URLSearchParams();
-          params.append('username', this.username);
-          params.append('password', this.password);
-          params.append('v_code', this.v_code);
-
-          that.axios.post(url, params)
-            .then(function (response) {
-              if (response.data.error_code === 0 ) {
-                //that.$message.success("登录成功");
-                let redirect = decodeURIComponent(that.$route.query.redirect || '/item/index');
-                that.$router.replace({
-                  path: redirect
-                });
-              }else{
-                if (response.data.error_code === 10206 || response.data.error_code === 10210) {
-                  that.show_v_code = true ;
-                  that.change_v_code_img() ;
-                };
-                that.$alert(response.data.error_message);
-              }
-              
-            });
+          
       },
       change_v_code_img(){
         var rand = '&rand='+Math.random();
@@ -105,6 +106,7 @@ export default {
       }
   },
   mounted() {
+    
     /*给body添加类，设置背景色*/
     document.getElementsByTagName("body")[0].className="grey-bg";
   },
@@ -115,7 +117,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
 .center-card a {

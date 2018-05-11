@@ -53,7 +53,7 @@ export default {
     return {
 
       v_code: '',
-      v_code_img:DocConfig.server+'/api/Verifycode/index',
+      v_code_img:DocConfig.server+'/api/Verifycode/index?',
       ruleForm: {
           username: '',
           password: '',
@@ -88,7 +88,6 @@ export default {
           var params = new URLSearchParams();
           params.append('username', this.ruleForm.username);
           params.append('password', this.ruleForm.password);
-          params.append('confirm_password', this.confirm_password);
           params.append('v_code', this.v_code);
 
           that.axios.post(url, params)
