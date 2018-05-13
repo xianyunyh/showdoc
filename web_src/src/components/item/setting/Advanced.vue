@@ -98,13 +98,13 @@ export default {
 
       deleteItem(){
         var that = this ;
-        var url = DocConfig.server+'/api/item/delete';
+        var url = DocConfig.server+'/api/item/delete/'+that.$route.params.item_id;
 
         var params = new URLSearchParams();
-        params.append('item_id',  that.$route.params.item_id);
+        //params.append('item_id',  that.$route.params.item_id);
         params.append('password',this.deleteForm.password );
 
-        that.axios.post(url, params)
+        that.axios.delete(url, params)
           .then(function (response) {
             if (response.data.error_code === 0 ) {
               that.dialogDeleteVisible = false;

@@ -21,9 +21,5 @@ Route::group('api', function ()  {
         ->validate('app\api\validate\UserValidate','login');
 
     //项目路由
-    Route::get('item/index','api/item/index');
-    Route::post('item/add','api/item/save');
-    Route::get('item/:itemId','api/item/read');
-    Route::put('item/:itemId','api/item/update');
-    
+    Route::resource('item','api/item');
 })->middleware('Api')->header($header)->allowCrossDomain();
