@@ -101,12 +101,12 @@ export default {
         var url = DocConfig.server+'/api/item/delete/'+that.$route.params.item_id;
 
         var params = new URLSearchParams();
-        //params.append('item_id',  that.$route.params.item_id);
+        params.append('item_id',  that.$route.params.item_id);
         params.append('password',this.deleteForm.password );
 
-        that.axios.delete(url, params)
+        that.axios.post(url, params)
           .then(function (response) {
-            if (response.data.error_code === 0 ) {
+            if (response.data.status === 1 ) {
               that.dialogDeleteVisible = false;
               that.$message.success(that.$t("success_jump"));
               setTimeout(function(){

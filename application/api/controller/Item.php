@@ -8,13 +8,16 @@
 
 namespace app\api\controller;
 
+use app\api\model\ItemMemberModel;
 use app\api\model\ItemModel;
+use app\api\model\UserModel;
 use app\api\validate\ItemValidate;
 
 class Item extends Base
 {
     protected $model;
     protected $validate;
+    protected $pk='item_id';
     public function __construct(ItemModel $model,ItemValidate $validate)
     {
         parent::__construct();
@@ -30,7 +33,8 @@ class Item extends Base
     public function index()
     {
         $uid = $this->request->uid;
-        $lists = $this->model->getListByUid($uid);
+        $user = new UserModel();
+        $lists = $user->getItems($uid);
         $this->returnSuccess($lists,'获取成功');
     }
 
@@ -84,7 +88,7 @@ class Item extends Base
      * 添加项目
      * @api POST /api/item
      */
-    public function save()
+    public function save(ItemMemberModel $member)
     {
         $data = $this->request->post();
 
@@ -93,10 +97,20 @@ class Item extends Base
         if(false == $this->validate->check($data)) {
             $this->returnError($this->validate->getError(),1000);
         }
-        $itemId = $this->model->allowField(true)->save($data);
-        if(!$itemId) {
+        $this->model->startTrans();
+        $res = $this->model->allowField(true)->save($data);
+        $itemId = $this->model->getLastInsID();
+        $insertData = [
+            'uid'=>$this->request->param('uid'),
+            'item_id'=>$itemId
+        ];
+
+        $insertRes = $member->allowField(true)->save($insertData);
+        if(!$res || !$insertRes) {
+            $this->model->rollback();
             $this->returnError('系统故障',-3);
         }
+        $this->model->commit();
         $this->returnSuccess([],'创建成功');
     }
 
@@ -106,21 +120,22 @@ class Item extends Base
      */
     public function delete($itemId)
     {
+        $itemId = $this->request->delete('item_id');
         $uid = $this->request->uid;
+
         $where = [
             'uid'=>$uid,
             'item_id'=>$itemId
         ];
         $itemInfo = $this->model->where($where)->find();
-        if(!empty($itemInfo)) {
+        if(empty($itemInfo)) {
             $this->returnError('项目不存在',1000);
         }
-        $res = $this->model->delete($itemId);
+        $res = $this->model->where('item_id',$itemId)->delete();
         if(!$res) {
-            $this->returnError('系统故障',-2);
+            $this->returnError('系统故障'.$this->model->getLastSql(),-2);
         }
         $this->returnSuccess([],'删除成功');
-
 
     }
 

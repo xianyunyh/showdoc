@@ -93,7 +93,7 @@ export default {
       },
       MyFormSubmit() {
           var that = this ;
-          var url = DocConfig.server+'/api/member/save';
+          var url = DocConfig.server+'/api/member';
 
           var params = new URLSearchParams();
           params.append('item_id',  that.$route.params.item_id);
@@ -106,11 +106,11 @@ export default {
 
           that.axios.post(url, params)
             .then(function (response) {
-              if (response.data.error_code === 0 ) {
+              if (response.data.status === 1 ) {
                 that.dialogFormVisible = false;
                 that.get_members() ;
               }else{
-                that.$alert(response.data.error_message);
+                that.$alert(response.data.msg);
               }
               
             })

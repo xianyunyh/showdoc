@@ -14,6 +14,7 @@ use think\Model;
 class ItemModel extends Model
 {
     protected $table = 'd_item';
+    protected $pk = 'item_id';
     // 定义时间戳字段名
     protected $autoWriteTimestamp = true;
     protected $createTime = 'add_time';
@@ -26,7 +27,9 @@ class ItemModel extends Model
         if($uid <= 0) {
             return [];
         }
+
         return $this->where('uid',$uid)->select()->toArray();
     }
+
 
 }

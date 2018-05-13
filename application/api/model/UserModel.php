@@ -10,6 +10,10 @@ class UserModel extends Model {
      */
     protected $table = 'd_user';
 
+    protected $pk ='uid';
+
+    public $uid;
+
 
     /**
      * 根据用户名获取用户信息
@@ -45,5 +49,11 @@ class UserModel extends Model {
         $where = ["uid"=>$uid];
         return $this->update($data, $where);
     }
+
+    public function items()
+    {
+        return $this->belongsToMany('ItemModel','\\app\\api\\model\\ItemMemberModel','uid','item_id');
+    }
+
 
 }

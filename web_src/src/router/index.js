@@ -127,7 +127,13 @@ const router =  new Router({
 router.beforeEach((to, from, next) => {
     if (to.meta.requiresAuth) {  // 判断该路由是否需要登录权限
         let token = sessionStorage.getItem('token');
-        store.commit('setUser',token);
+        if(token != '') {
+            store.commit({
+                type: 'setUser',
+                token: token
+            });
+        }
+        
         if (store.state.token || token) {  // 通过vuex state获取当前的token是否存在
             next();
         } else {
