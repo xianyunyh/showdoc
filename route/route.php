@@ -14,8 +14,14 @@ $header = config('app.cors_header');
 
 Route::group('api', function ()  {
     //注册接口
-    Route::post('user/register', 'api/user/register')->validate('app\api\validate\UserValidate','register');
+    Route::post('user/register', 'api/user/register')
+        ->validate('app\api\validate\UserValidate','register');
     //登录接口
-    Route::post('user/login', 'api/user/login')->validate('app\api\validate\UserValidate','login');
+    Route::post('user/login', 'api/user/login')
+        ->validate('app\api\validate\UserValidate','login');
 
+    Route::get('item/index','api/item/index');
+    Route::post('item/add','api/item/save');
+    Route::get('item/:itemId','api/item/read');
+    Route::put('item/:itemId','api/item/update');
 })->middleware('Api')->header($header)->allowCrossDomain();

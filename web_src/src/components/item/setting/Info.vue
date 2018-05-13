@@ -41,16 +41,16 @@ export default {
 
       get_item_info(){
         var that = this ;
-        var url = DocConfig.server+'/api/item/detail';
+        var url = DocConfig.server+'/api/item/'+that.$route.params.item_id;
         var params = new URLSearchParams();
         params.append('item_id',  that.$route.params.item_id);
-        that.axios.post(url, params)
+        that.axios.get(url, params)
           .then(function (response) {
-            if (response.data.error_code === 0 ) {
+            if (response.data.status === 1 ) {
               var Info = response.data.data
               that.infoForm =  Info;
             }else{
-              that.$alert(response.data.error_message);
+              that.$alert(response.data.msg);
             }
             
           })
@@ -60,21 +60,20 @@ export default {
       },
       FormSubmit() {
           var that = this ;
-          var url = DocConfig.server+'/api/item/update';
+          var url = DocConfig.server+'/api/item/'+that.$route.params.item_id;
 
           var params = new URLSearchParams();
-          params.append('item_id',  that.$route.params.item_id);
           params.append('item_name', this.infoForm.item_name);
           params.append('item_description', this.infoForm.item_description);
-          params.append('item_domain', this.infoForm.item_domain);
+          //params.append('item_domain', this.infoForm.item_domain);
           params.append('password', this.infoForm.password);
 
-          that.axios.post(url, params)
+          that.axios.put(url, params)
             .then(function (response) {
-              if (response.data.error_code === 0 ) {
+              if (response.data.status === 1 ) {
                 that.$message.success(that.$t("modify_success"));
               }else{
-                that.$alert(response.data.error_message);
+                that.$alert(response.data.msg);
               }
               
             })

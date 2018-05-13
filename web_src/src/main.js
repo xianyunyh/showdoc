@@ -1,12 +1,14 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
+import Vuex from 'vuex'
 import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import Header from '@/components/common/Header'
 import Footer from '@/components/common/Footer'
+import Lodding from '@/components/common/Lodding'
 import util from '@/util.js'
 import axios from '@/http'
 import VueI18n from 'vue-i18n'
@@ -15,14 +17,16 @@ import zhLocale from 'element-ui/lib/locale/lang/zh-CN'
 import myZhLocale from '../static/lang/zh-CN'
 import myEnLocale from '../static/lang/en'
 import 'url-search-params-polyfill'
-
-
+import store from '@/store/index'
+Vue.use(Vuex);
 Vue.use(util);
 Vue.config.productionTip = false
-Vue.component('Header', Header);
-Vue.component('Footer', Footer);
+
 Vue.use(ElementUI)
 Vue.use(VueI18n)
+Vue.component('Header', Header);
+Vue.component('Footer', Footer);
+Vue.component('Footer', Lodding);
 
 //多语言相关
 var allZhLocale = Object.assign(zhLocale,myZhLocale);
@@ -43,6 +47,7 @@ Vue.prototype.axios = axios;
 new Vue({
   el: '#app',
   router,
+  store,
   template: '<App/>',
   components: { App }
 })

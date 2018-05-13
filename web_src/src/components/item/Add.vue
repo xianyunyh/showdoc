@@ -27,7 +27,7 @@
               </el-form-item>
 
               <el-form-item label="" class="text-left">
-                 <el-checkbox v-model="show_copy" @change="show_copy_even">{{$t('copy_exists_item')}}</el-checkbox>
+                 <el-checkbox v-model="show_copy">{{$t('copy_exists_item')}}</el-checkbox>
                  <el-select v-model="copy_item_id" :placeholder="$t('please_choose')" v-if="show_copy" @change="choose_copy_item">
                     <el-option
                       v-for="item in itemList"
@@ -70,6 +70,7 @@ export default {
   },
   data () {
     return {
+      bgColor:"grey-bg",
       item_type: '1',
       item_name: '',
       item_description:'',
@@ -83,24 +84,6 @@ export default {
 
   },
   methods: {
-    get_item_list(){
-        var that = this ;
-        var url = DocConfig.server+'/api/item/myList';
-
-        var params = new URLSearchParams();
-
-        that.axios.get(url, params)
-          .then(function (response) {
-            if (response.data.error_code === 0 ) {
-              //that.$message.success("加载成功");
-              var json = response.data.data ;
-              that.itemList = json ;
-            }else{
-              that.$alert(response.data.error_message);
-            }
-            
-          });
-    },
     choose_copy_item(item_id){
       for (var i = 0; i < this.itemList.length; i++) {
         if (item_id == this.itemList[i].item_id) {
@@ -123,17 +106,16 @@ export default {
 
         that.axios.post(url, params)
           .then(function (response) {
-            if (response.data.error_code === 0 ) {
+            if (response.data.status === 1 ) {
               that.$router.push({path:'/item/index'});
             }else{
-              that.$alert(response.data.error_message);
+              that.$alert(response.data.msg);
             }
             
           });
       },
   },
   mounted() {
-    this.get_item_list();
     /*给body添加类，设置背景色*/
     document.getElementsByTagName("body")[0].className="grey-bg";
   },

@@ -33,7 +33,7 @@
         <div class="container-thumbnails">
           <ul class="thumbnails" id="item-list" v-if="itemList">
 
-              <li class=" text-center"  v-for="item in itemList">
+              <li class=" text-center"  v-for="(item, index) in itemList" :key="index">
                 <router-link class="thumbnail item-thumbnail"  :to="'/' +  (item.item_domain ? item.item_domain:item.item_id )" title="">
                   <span class="item-setting " @click.prevent="click_item_setting(item.item_id)" :title="$t('item_setting')" >
                     <i class="el-icon-setting"></i>
@@ -161,21 +161,22 @@ export default {
   data() {
     return {
       currentDate: new Date(),
-      itemList:{}
+      itemList:[]
     };
   },
   methods:{
     get_item_list(){
         var that = this ;
-        var url = DocConfig.server+'/api/item/myList';
+        var url = DocConfig.server+'/api/item/index';
 
         var params = new URLSearchParams();
 
         that.axios.get(url, params)
           .then(function (response) {
-            if (response.data.error_code === 0 ) {
+            if (response.data.status === 1 ) {
               //that.$message.success("加载成功");
-              var json = response.data.data ;
+              var json = response.data.data;
+              console.log(json)
               that.itemList = json ;
               that.bind_item_even();
             }else{
@@ -266,6 +267,7 @@ export default {
     },
   },
   mounted () {
+    this.$loading({fullscreen:true}).close();
     this.get_item_list();
     
   },

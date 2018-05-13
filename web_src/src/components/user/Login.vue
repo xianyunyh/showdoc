@@ -80,10 +80,17 @@ export default {
 
               that.axios.post(url, params)
                 .then(function (response) {
-                  console.log(response.data)
                   if (response.data.status === 1 ) {
-                    
-                    //that.$message.success("登录成功");
+                      let data = response.data.data;
+                      that.$store.commit({
+                          type: 'setUser',
+                          token: data.token,
+                          uid: data.uid,
+                          username: data.username
+                      });
+                      sessionStorage.setItem("token", data.token);
+
+                      //that.$message.success("登录成功");
                     let redirect = decodeURIComponent(that.$route.query.redirect || '/item/index');
                     that.$router.replace({
                       path: redirect

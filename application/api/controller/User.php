@@ -8,11 +8,15 @@
 namespace app\api\controller;
 
 
+use app\traits\Tools;
+use think\Log;
 use think\Request;
 use app\api\validate\UserValidate;
 use app\api\model\UserModel;
 
 class User extends Base {
+
+    use Tools;
     protected $model;
 
     public function __construct (UserModel $model)
@@ -30,15 +34,31 @@ class User extends Base {
      */
     public function register (Request $request)
     {
-        $data  = $request->post();
+        $data  = [];
+        $data['username'] = $request->post('username');
+        $data['password'] = $request->post('password');
         $count = $this->model->where('username', $data['username'])->count();
         if ($count >= 1) {
             $this->returnError('用户已存在', 20002);
         }
 
-        unset($data['v_code']);
+
         $data['password'] = password_hash($data['password'], PASSWORD_BCRYPT);
-        $res              = $this->model->insert($data);
+        $data['reg_time'] = time();
+
+        $res = $this->model->insert($data);
+
+        $tokenData = [
+            'uid'=>$res,
+            'expire'=>time()+24*3600
+        ];
+        $token = $this->encryptToken($tokenData);
+
+        $returnData = [
+            'token'=>$token,
+            'uid'=>$res,
+            'username'=>$data['username']
+        ];
         if ($res) {
             $this->returnSuccess(["token" => "11" . $res]);
         }
@@ -66,16 +86,26 @@ class User extends Base {
             $this->returnError('密码不正确', 20003);
         }
 
-        $data['last_login_time'] = time();
+        $data = [
+            'uid' =>$result['uid'],
+            'expire'=>time()+24*3600
+        ];
+        $token = $this->encryptToken(json_encode($data));
+        $updateData['cookie_token'] = $token;
+        $updateData['last_login_time'] = time();
 
         //更新用户
-        $res = $this->model->updateInfoByUid($result['uid'], $data);
+        $res = $this->model->updateInfoByUid($result['uid'], $updateData);
 
         if (!$res) {
-            $this->returnError('系统故障', '-2');
+            $this->returnError('系统故障'.$this->model->getLastSql(), '-2');
         }
-
-        $this->returnSuccess([], "登陆成功");
+        $returnData = [
+            'token'=>$token,
+            'uid'=>$result['uid'],
+            'username'=>$result['username']
+        ];
+        $this->returnSuccess($returnData, "登陆成功");
 
     }
 
@@ -97,9 +127,43 @@ class User extends Base {
     }
 
 
+    /**
+     * 修改密码
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
     public function changePwd ()
     {
+        //用户id
+        $uid = $this->request->post('uid');
+        $userInfo = $this->model->find($uid)->toArray();
+        if(empty($userInfo)) {
+            $this->returnError('用户不存在',20005);
+        }
 
+        $oldPwd = $this->request->post('oldpassword');
+        //校验密码
+        if(!password_verify($oldPwd,$userInfo['password'])) {
+           $this->returnError('旧密码输入不正确',20006);
+        }
+        $newPwd = $this->request->post('password');
+
+        if(!password_verify($newPwd,$userInfo['password'])){
+            $this->returnSuccess([],'新密码和旧密码一致无需修改');
+        }
+        $updateData = [
+            'password'=>password_hash($newPwd,PASSWORD_BCRYPT)
+        ];
+
+        //更新用户信息
+        $res = $this->model->updateInfoByUid($uid,$updateData);
+
+        if(!$res) {
+            $this->returnError('系统故障','-3');
+        }
+
+        $this->returnSuccess([],'更新成功');
 
     }
 

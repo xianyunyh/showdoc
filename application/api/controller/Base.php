@@ -15,4 +15,13 @@ use app\traits\Jump;
 class Base extends Controller {
     use Jump;
 
+    /**
+     * 空操作
+     * @param $name
+     */
+    public function _empty()
+    {
+        $this->returnError('no api found',-3    );
+    }
+
 }

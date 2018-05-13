@@ -17,96 +17,126 @@ import PageEdit from '@/components/page/edit/Index'
 import PageDiff from '@/components/page/Diff'
 import Catalog from '@/components/catalog/Index'
 import Notice from '@/components/notice/Index'
-
-
+import store from '@/store/index'
 Vue.use(Router)
-
-export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'Index',
-      component: Index
-    },
-    {
-      path: '/user/login',
-      name: 'UserLogin',
-      component: UserLogin
-    },
-    {
-      path: '/user/setting',
-      name: 'UserSetting',
-      component: UserSetting
-    },
-    {
-      path: '/user/register',
-      name: 'UserRegister',
-      component: UserRegister
-    },
-    {
-      path: '/user/resetPassword',
-      name: 'UserResetPassword',
-      component: UserResetPassword
-    },
-    {
-      path: '/user/ResetPasswordByUrl',
-      name: 'ResetPasswordByUrl',
-      component: ResetPasswordByUrl
-    },
-    {
-      path: '/item/index',
-      name: 'ItemIndex',
-      component: ItemIndex
-    },
-    {
-      path: '/item/add',
-      name: 'ItemAdd',
-      component: ItemAdd
-    },
-    {
-      path: '/item/password/:item_id',
-      name: 'ItemPassword',
-      component: ItemPassword
-    },
-    {
-      path: '/:item_id',
-      name: 'ItemShow',
-      component: ItemShow
-    },
-    {
-      path: '/item/export/:item_id',
-      name: 'ItemExport',
-      component: ItemExport
-    },
-    {
-      path: '/item/setting/:item_id',
-      name: 'ItemSetting',
-      component: ItemSetting
-    },
-    {
-      path: '/page/:page_id',
-      name: 'PageIndex',
-      component: PageIndex
-    },
-    {
-      path: '/page/edit/:item_id/:page_id',
-      name: 'PageEdit',
-      component: PageEdit
-    },
-    {
-      path: '/page/diff/:page_id/:page_history_id',
-      name: 'PageDiff',
-      component: PageDiff
-    },
-    {
-      path: '/catalog/:item_id',
-      name: 'Catalog',
-      component: Catalog
-    },
-    {
-      path: '/notice/index',
-      name: 'Notice',
-      component: Notice
-    },
-  ]
+const router =  new Router({
+    routes: [
+        {
+            path: '/',
+            name: 'Index',
+            component: Index,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/user/login',
+            name: 'UserLogin',
+            component: UserLogin
+        },
+        {
+            path: '/user/setting',
+            name: 'UserSetting',
+            component: UserSetting,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/user/register',
+            name: 'UserRegister',
+            component: UserRegister,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/user/resetPassword',
+            name: 'UserResetPassword',
+            component: UserResetPassword,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/user/ResetPasswordByUrl',
+            name: 'ResetPasswordByUrl',
+            component: ResetPasswordByUrl,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/item/index',
+            name: 'ItemIndex',
+            component: ItemIndex,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/item/add',
+            name: 'ItemAdd',
+            component: ItemAdd,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/item/password/:item_id',
+            name: 'ItemPassword',
+            component: ItemPassword,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/:item_id',
+            name: 'ItemShow',
+            component: ItemShow,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/item/export/:item_id',
+            name: 'ItemExport',
+            component: ItemExport,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/item/setting/:item_id',
+            name: 'ItemSetting',
+            component: ItemSetting,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/page/:page_id',
+            name: 'PageIndex',
+            component: PageIndex,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/page/edit/:item_id/:page_id',
+            name: 'PageEdit',
+            component: PageEdit,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/page/diff/:page_id/:page_history_id',
+            name: 'PageDiff',
+            component: PageDiff,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/catalog/:item_id',
+            name: 'Catalog',
+            component: Catalog,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/notice/index',
+            name: 'Notice',
+            component: Notice,
+            meta: { requiresAuth: true }
+        },
+    ]
+});
+router.beforeEach((to, from, next) => {
+    if (to.meta.requiresAuth) {  // 判断该路由是否需要登录权限
+        if (store.state.token) {  // 通过vuex state获取当前的token是否存在
+            next();
+        } else {
+            next({
+                path: '/user/login',
+                query: {redirect: to.fullPath}  // 将跳转的路由path作为参数，登录成功后跳转到该路由
+            })
+        }
+    }
+    else {
+        next();
+    }
 })
+export default router

@@ -22,7 +22,7 @@ class UserModel extends Model {
         if(empty($name)) {
             return null;
         }
-        $data = $this->where('username','=',$name)->find();
+        $data = $this->where('username','=',$name)->find()->toArray();
 
         return $data;
     }
@@ -38,7 +38,8 @@ class UserModel extends Model {
     {
 
         $uid = intval($uid);
-        if(empty($uid) || empty($update)) {
+        if(empty($uid) || empty($data)) {
+
             return false;
         }
         $where = ["uid"=>$uid];

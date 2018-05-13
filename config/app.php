@@ -155,8 +155,9 @@ return [
     },
     'cors_header' => [
         'Access-Control-Allow-Origin'=>'*',
-        'Access-Control-Allow-Headers'=>'Origin, X-Requested-With, Content-Type, Accept',
-        'Access-Control-Allow-Methods'=>'GET, POST, PUT'
-    ]
+        'Access-Control-Allow-Headers'=>'Origin, X-Requested-With, Content-Type, Accept,Token',
+        'Access-Control-Allow-Methods'=>'GET, POST, PUT, OPTIONS, DELETE'
+    ],
+    'secret_key' =>'ceshikey'
 
 ];
