@@ -100,4 +100,28 @@ class Item extends Base
         $this->returnSuccess([],'创建成功');
     }
 
+    /**
+     * @param $itemId integer 项目id
+     * @api  DELETE /api/item/:id
+     */
+    public function delete($itemId)
+    {
+        $uid = $this->request->uid;
+        $where = [
+            'uid'=>$uid,
+            'item_id'=>$itemId
+        ];
+        $itemInfo = $this->model->where($where)->find();
+        if(!empty($itemInfo)) {
+            $this->returnError('项目不存在',1000);
+        }
+        $res = $this->model->delete($itemId);
+        if(!$res) {
+            $this->returnError('系统故障',-2);
+        }
+        $this->returnSuccess([],'删除成功');
+
+
+    }
+
 }

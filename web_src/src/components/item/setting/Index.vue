@@ -29,9 +29,7 @@
             <el-tab-pane :label="$t('open_api')" name="four">
 
                   <OpenApi> </OpenApi>
-                  
-                </el-form>
-
+                
             </el-tab-pane>
 
             </el-tabs>
