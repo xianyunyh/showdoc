@@ -28,5 +28,7 @@ Route::group('api', function ()  {
     Route::delete('item/:itemId','api/item/delete');
     Route::get('item/detail/:itemId','api/item/info');
 
+    Route::resource('catalog','api/catalog');
+
     Route::resource('member','api/itemMember');
 })->middleware('Api')->header($header)->allowCrossDomain();
