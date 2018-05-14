@@ -33,8 +33,7 @@ class Item extends Base
     public function index()
     {
         $uid = $this->request->uid;
-        $user = new UserModel();
-        $lists = $user->getItems($uid);
+        $lists = $this->model->getListByUid($uid);
         $this->returnSuccess($lists,'获取成功');
     }
 

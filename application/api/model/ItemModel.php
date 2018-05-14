@@ -31,5 +31,14 @@ class ItemModel extends Model
         return $this->where('uid',$uid)->select()->toArray();
     }
 
+    public function getInfoBy2Id($uid,$itemId)
+    {
+        $where = [
+            'uid'=>$uid,
+            'item_id'=>$itemId
+        ];
+        return $this->where($where)->find();
+    }
+
 
 }
