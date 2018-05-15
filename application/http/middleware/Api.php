@@ -29,7 +29,7 @@ class Api
                 $this->returnError('token无效',1001);
             }
             if($res['expire'] < time()) {
-                $this->returnError('token已过期',1002);
+                $this->returnError('token已过期',9999);
             }
 
             $request->uid = $res['uid'];

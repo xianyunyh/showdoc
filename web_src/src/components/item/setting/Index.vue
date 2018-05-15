@@ -5,8 +5,8 @@
     <el-container>
           <el-card class="center-card">
           <template>
-            <el-button type="text" @click="goback" class="goback-btn " >{{$t('goback')}}</el-button>
-            <el-tabs  value="first" type="card">
+            <el-button @tab-click="get_members" type="text" @click="goback" class="goback-btn " >{{$t('goback')}}</el-button>
+            <el-tabs  value="first" type="card" @tab-click="handleClick">
               <el-tab-pane :label="$t('base_info')" name="first">
 
                 <Info> </Info>
@@ -14,9 +14,9 @@
             </el-tab-pane>
 
 
-            <el-tab-pane :label="$t('member_manage')" name="second">
+            <el-tab-pane :label="$t('member_manage')" name="second" >
 
-                <Member> </Member>
+                <Member :members="members"> </Member>
 
             </el-tab-pane>
 
@@ -48,6 +48,7 @@ import Info from '@/components/item/setting/Info'
 import Member from '@/components/item/setting/Member'
 import Advanced from '@/components/item/setting/Advanced'
 import OpenApi from '@/components/item/setting/OpenApi'
+import { getItemMembers } from "@/api/api";
 export default {
   name: 'Login',
   components : {
@@ -60,12 +61,18 @@ export default {
     return {
       userInfo:{
 
-      }
+      },
+      members:[],
     }
 
   },
   methods: {
 
+      handleClick(tab, event){
+        if(tab.index == 1 && this.members.length === 0) {
+          this.get_members();
+        }
+      },
       get_item_info(){
         var that = this ;
         var url = DocConfig.server+'/api/item/detail';
@@ -87,12 +94,18 @@ export default {
       },
       goback(){
         this.$router.go(-1);
+      },
+      async get_members(){
+        let that = this
+        const item_id = that.$route.params.item_id
+        let data = await getItemMembers(item_id)
+        console.log(data)
       }
 
   },
 
   mounted(){
-    
+    this.get_members()
   },
   beforeCreate() {
     /*给body添加类，设置背景色*/

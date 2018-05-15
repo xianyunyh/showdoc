@@ -87,7 +87,7 @@ export default {
   },
 
   mounted(){
-    this.get_key_info();
+   // this.get_key_info();
   }
 }
 </script>

@@ -31,7 +31,13 @@ class ItemMember extends Base
         $model = new ItemMemberModel();
         $users = $model->getItemUsers($itemId);
         $this->returnSuccess($users,'获取成功');
+    }
 
+    public function read($id)
+    {
+        $model = new ItemMemberModel();
+        $users = $model->getItemUsers($id);
+        $this->returnSuccess($users,'获取成功');
     }
 
     public function save()
@@ -53,6 +59,7 @@ class ItemMember extends Base
             'uid' => $UID,
             'item_id' => $itemId
         ];
+
         $itemInfo = $this->itemModel->where($where)->find();
         if (empty($itemInfo)) {
             $this->returnError('项目不存在');
@@ -62,7 +69,8 @@ class ItemMember extends Base
             'uid' => $userInfo['uid'],
             'item_id' => $itemId
         ];
-        $res = $this->model->save($data);
+        $memerModel = new ItemMemberModel();
+        $res = $memerModel->save($data);
 
         if (!$res) {
             $this->returnError('新增失败');

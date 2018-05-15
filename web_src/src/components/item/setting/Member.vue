@@ -55,6 +55,7 @@
 
 export default {
   name: 'Login',
+  props:['members'],
   components : {
 
   },
@@ -64,33 +65,11 @@ export default {
         username:'',
         is_readonly:false
       },
-      members:[],
       dialogFormVisible:false,
-      
     }
 
   },
   methods: {
-
-      get_members(){
-        let that = this ;
-        let url = DocConfig.server+'/api/member/'+that.$route.params.item_id;
-        let params = new URLSearchParams();
-        params.append('item_id',  that.$route.params.item_id);
-        that.axios.get(url, params)
-          .then(function (response) {
-            if (response.data.status === 1 ) {
-              let Info = response.data.data;
-              that.members =  Info;
-            }else{
-              that.$alert(response.data.msg);
-            }
-            
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-      },
       MyFormSubmit() {
           var that = this ;
           var url = DocConfig.server+'/api/member';
@@ -146,7 +125,7 @@ export default {
   },
 
   mounted(){
-    this.get_members();
+    //this.get_members();
   }
 }
 </script>

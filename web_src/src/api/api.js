@@ -1,7 +1,11 @@
 import axios from '../http'
 
-const test = async() => {
-  await axios.get('127.0.0.11/api/user/register')
+export const getItems = async() => {
+  let data = await axios.post('/api/items')
+  return data
 }
 
-export default test
+export const getItemMembers = async (id) => {
+  let data = await axios.get('/api/member/' + id)
+  return data
+}

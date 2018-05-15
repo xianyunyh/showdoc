@@ -47,20 +47,20 @@ class User extends Base {
         $data['reg_time'] = time();
 
         $res = $this->model->insert($data);
-
+        $uid = $this->model->getLastInsID();
         $tokenData = [
-            'uid'=>$res,
+            'uid'=>$uid,
             'expire'=>time()+24*3600
         ];
         $token = $this->encryptToken($tokenData);
 
         $returnData = [
             'token'=>$token,
-            'uid'=>$res,
+            'uid'=>$uid,
             'username'=>$data['username']
         ];
         if ($res) {
-            $this->returnSuccess(["token" => "11" . $res]);
+            $this->returnSuccess($returnData);
         }
         $this->returnError("更新失败", 20001);
     }

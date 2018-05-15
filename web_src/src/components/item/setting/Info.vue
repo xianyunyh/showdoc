@@ -84,7 +84,7 @@ export default {
   },
 
   mounted(){
-    this.get_item_info();
+   // this.get_item_info();
   }
 }
 </script>
