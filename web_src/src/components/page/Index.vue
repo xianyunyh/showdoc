@@ -119,7 +119,7 @@ export default {
 
         var params = new URLSearchParams();
         params.append('page_id', page_id );
-        that.axios.post(url, params)
+        that.axios.get(url, params)
           .then(function (response) {
             if (response.data.error_code === 0 ) {
               //that.$message.success("加载成功");

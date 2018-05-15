@@ -14,7 +14,6 @@ axios.defaults.baseURL = 'http://127.0.0.11/'
 axios.interceptors.request.use(
 
     config => {
-      console.log(config.method)
       if (config.method !== 'option') {
         loadingInstance = Loading.service({ fullscreen: true, text: '正在加载中', target: 'app' })
       }
@@ -37,7 +36,6 @@ axios.interceptors.response.use(
       if (response.config.data && response.config.data.indexOf('redirect_login=false') > -1) {
             // 不跳转到登录
       } else if (response.data.code === 9999) {
-        console.log(1)
         router.replace({
           path: '/user/login',
           query: {redirect: router.currentRoute.fullPath}

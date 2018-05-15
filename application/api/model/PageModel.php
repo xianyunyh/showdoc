@@ -20,5 +20,26 @@ class PageModel extends Model
             return $value;
     }
 
+    /**
+     * 单页page
+     *
+     * @param $itemId
+     * @return array|\PDOStatement|string|\think\Collection
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public function getSingle($itemId)
+    {
+        if(empty($itemId)) {
+            return [];
+        }
+
+        $where = [
+            "cate_id" => 0,
+            "item_id"=>$itemId
+        ];
+        return $this->where($where)->select();
+    }
 
 }

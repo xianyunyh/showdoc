@@ -3,7 +3,7 @@
     <Header> </Header>
     
     <!-- 展示常规项目 -->
-    <ShowRegularItem :item_info="item_info" :search_item="search_item" v-if="item_info && item_info.item_type == 1 "> 
+    <ShowRegularItem :item_info="item_info" :search_item="search_item" > 
 
     </ShowRegularItem>
     
@@ -54,8 +54,9 @@
         that.axios.get(url, params)
           .then(function (response) {
             loading.close();
-            if (response.data.error_code === 0 ) {
-              var json = response.data.data ;
+            console.log(response)
+            if (response.status === 1 ) {
+              var json = response.data ;
               if (json.default_page_id <= 0 ) {
                 if (json.menu.pages[0]) {
                   json.default_page_id = json.menu.pages[0].page_id
@@ -81,7 +82,7 @@
               });
             }
             else{
-              that.$alert(response.data.error_message);
+              that.$alert(response.msg);
             }
             
           });

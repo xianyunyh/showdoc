@@ -1,5 +1,9 @@
 import axios from '../http'
 
+export const login = async (params) => {
+  let data = await axios.post('/api/user/login',params)
+  return data
+}
 export const getItems = async() => {
   let data = await axios.post('/api/items')
   return data

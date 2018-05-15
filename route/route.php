@@ -31,4 +31,7 @@ Route::group('api', function ()  {
     Route::resource('catalog','api/catalog');
 
     Route::resource('member','api/itemMember');
+
+    Route::post('page/save','api/page/save');
+    Route::get('item/info:itemId','api/item/info');
 })->middleware('Api')->header($header)->allowCrossDomain();

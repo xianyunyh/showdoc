@@ -267,7 +267,7 @@ export default {
     },
   },
   mounted () {
-    this.$loading({fullscreen:true}).close();
+ 
     this.get_item_list();
     
   },

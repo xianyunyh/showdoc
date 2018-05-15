@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import {test} from '../../api/api'
+import {login} from '@/api/api'
 
 export default {
   name: 'Login',
@@ -65,8 +65,8 @@ export default {
 
   },
   methods: {
-      onSubmit(formName) {
-          this.$refs[formName].validate((valid) => {
+     async onSubmit(formName) {
+         this.$refs[formName].validate((valid) => {
               if (!valid) {
                   console.log('error submit!!');
                   return false;
@@ -78,33 +78,18 @@ export default {
               params.append('password', this.ruleForm.password);
               params.append('v_code', this.v_code);
 
-              that.axios.post(url, params)
-                .then(function (response) {
-                  if (response.data.status === 1 ) {
-                      let data = response.data.data;
-                      that.$store.commit({
-                          type: 'setUser',
-                          token: data.token,
-                          uid: data.uid,
-                          username: data.username
-                      });
-                      sessionStorage.setItem("token", data.token);
-
-                      //that.$message.success("登录成功");
-                    let redirect = decodeURIComponent(that.$route.query.redirect || '/item/index');
-                    that.$router.replace({
+              login(params).then(data=>{
+                  sessionStorage.setItem('token',data.data.token)
+                  sessionStorage.setItem('uid',data.data.uid)
+                  this.$store.commit('setUser',data.data)
+                  let redirect = decodeURIComponent(that.$route.query.redirect || '/item/index');
+                  that.$router.replace({
                       path: redirect
-                    });
-                  }else{
-                    if (response.data.status === 0 ) {
-                        that.$alert(response.data.msg);
-                    };
-                    that.$alert(response.data.msg);
-                  }
-                  
-                });
+                  });
+              })
+
           });
-          
+
           
       },
       change_v_code_img(){

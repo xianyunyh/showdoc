@@ -8,6 +8,7 @@
 
 namespace app\api\controller;
 
+use app\api\model\CatalogModel;
 use app\api\model\ItemMemberModel;
 use app\api\model\ItemModel;
 use app\api\model\UserModel;
@@ -143,7 +144,12 @@ class Item extends Base
 
     public function info($itemId)
     {
-        $this->returnSuccess([]);
+        $data = [];
+        $model = new CatalogModel();
+        $data['menu']['catalogs'] = $model->getLists($itemId);
+        $this->returnSuccess($data);
+
     }
+
 
 }

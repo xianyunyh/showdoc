@@ -17,6 +17,7 @@ class Api
     {
         //获取路由
         $route = $request->path();
+
         if(!in_array($route,$this->excludeRoute)){
             $token = $request->header("Token");
             if(empty($token)) {
