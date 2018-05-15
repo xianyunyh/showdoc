@@ -173,14 +173,14 @@ export default {
 
         that.axios.get(url, params)
           .then(function (response) {
-            if (response.data.status === 1 ) {
+            if (response.status === 1 ) {
               //that.$message.success("加载成功");
-              var json = response.data.data;
+              var json = response.data;
               console.log(json)
               that.itemList = json ;
               that.bind_item_even();
             }else{
-              that.$alert(response.data.error_message);
+              that.$alert(response.msg);
             }
             
           });

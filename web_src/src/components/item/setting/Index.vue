@@ -9,7 +9,7 @@
             <el-tabs  value="first" type="card" @tab-click="handleClick">
               <el-tab-pane :label="$t('base_info')" name="first">
 
-                <Info> </Info>
+                <Info :infoForm="infoForm"> </Info>
 
             </el-tab-pane>
 
@@ -48,7 +48,7 @@ import Info from '@/components/item/setting/Info'
 import Member from '@/components/item/setting/Member'
 import Advanced from '@/components/item/setting/Advanced'
 import OpenApi from '@/components/item/setting/OpenApi'
-import { getItemMembers } from "@/api/api";
+import { getItemMembers,getItemInfo } from "@/api/api";
 export default {
   name: 'Login',
   components : {
@@ -63,6 +63,7 @@ export default {
 
       },
       members:[],
+      infoForm:[]
     }
 
   },
@@ -73,24 +74,11 @@ export default {
           this.get_members();
         }
       },
-      get_item_info(){
+      async get_item_info(){
         var that = this ;
-        var url = DocConfig.server+'/api/item/detail';
-        var params = new URLSearchParams();
-        params.append('item_id',  that.$route.params.item_id);
-        that.axios.post(url, params)
-          .then(function (response) {
-            if (response.data.error_code === 0 ) {
-              var Info = response.data.data
-              that.infoForm =  Info;
-            }else{
-              that.$alert(response.data.error_message);
-            }
-            
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+        let item_id =  that.$route.params.item_id
+        let data = await getItemInfo(item_id)
+        this.infoForm = data.data
       },
       goback(){
         this.$router.go(-1);
@@ -100,12 +88,13 @@ export default {
         const item_id = that.$route.params.item_id
         let data = await getItemMembers(item_id)
         console.log(data)
+        this.members = data.data
       }
 
   },
 
   mounted(){
-    this.get_members()
+    this.get_item_info()
   },
   beforeCreate() {
     /*给body添加类，设置背景色*/

@@ -22,64 +22,35 @@
 </template>
 
 <script>
-
+import { updateItem } from "@/api/api";
 
 export default {
   name: 'Login',
+  props:['infoForm'],
   components : {
 
   },
   data () {
     return {
-      infoForm:{
-
-      }
+     
     }
 
   },
   methods: {
-
-      get_item_info(){
-        var that = this ;
-        var url = DocConfig.server+'/api/item/'+that.$route.params.item_id;
-        var params = new URLSearchParams();
-        params.append('item_id',  that.$route.params.item_id);
-        that.axios.get(url, params)
-          .then(function (response) {
-            if (response.data.status === 1 ) {
-              var Info = response.data.data
-              that.infoForm =  Info;
-            }else{
-              that.$alert(response.data.msg);
-            }
-            
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-      },
-      FormSubmit() {
+      async FormSubmit() {
           var that = this ;
-          var url = DocConfig.server+'/api/item/'+that.$route.params.item_id;
-
+          var item_id = that.$route.params.item_id
           var params = new URLSearchParams();
           params.append('item_name', this.infoForm.item_name);
           params.append('item_description', this.infoForm.item_description);
           //params.append('item_domain', this.infoForm.item_domain);
           params.append('password', this.infoForm.password);
-
-          that.axios.put(url, params)
-            .then(function (response) {
-              if (response.data.status === 1 ) {
-                that.$message.success(that.$t("modify_success"));
-              }else{
-                that.$alert(response.data.msg);
-              }
-              
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
+          let data = await updateItem(item_id,params)
+          if(data.status == 1) {
+            this.$message.success(data.msg);
+          }else{
+            this.$message.error(data.msg);
+          }
       },
   },
 

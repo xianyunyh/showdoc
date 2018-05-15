@@ -51,8 +51,10 @@ class ItemMemberModel extends \think\model\Pivot
         }
         $result = $this->alias('m')
             ->leftJoin('user u','m.uid = u.uid')
+            ->field('u.username,u.uid,u.name,m.add_time')
             ->where('m.item_id',$itemId)
             ->select();
+        return $result;
     }
 
 }
