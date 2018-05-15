@@ -39,7 +39,7 @@
 
         <!-- 二级目录的页面 -->
         <el-menu-item-group v-if="catalog2.pages" v-for="(page2 ,page2_index) in catalog2.pages" :key="page2.page_id">
-          <el-menu-item :index="page2.page_id+'s'">{{page2.page_title}}</el-menu-item>
+          <el-menu-item  @contextmenu="showMenu" :index="page2.page_id+'s'">{{page2.page_title}}</el-menu-item>
         </el-menu-item-group>
 
         <!-- 二级目录下的三级目录 -->
@@ -76,6 +76,9 @@
     Editormd
   },
   methods:{
+    showMenu(){
+      alert(1)
+    },
     //选中菜单的回调
     select_menu(index, indexPath){
       this.change_url(index);
