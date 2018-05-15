@@ -23,9 +23,12 @@ Route::group('api', function ()  {
     //项目路由
     Route::get('item/index','api/item/index');
     Route::post('item/add','api/item/save');
-    Route::get('item/:itemId','api/item/read');
+    Route::get('item/:itemId$','api/item/read');
     Route::put('item/:itemId','api/item/update');
     Route::delete('item/:itemId','api/item/delete');
+    Route::get('item/detail/:itemId','api/item/info');
+
+    Route::resource('catalog','api/catalog');
 
     Route::resource('member','api/itemMember');
 })->middleware('Api')->header($header)->allowCrossDomain();

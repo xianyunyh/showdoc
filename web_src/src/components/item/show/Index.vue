@@ -43,7 +43,7 @@
         var item_id = this.$route.params.item_id ? this.$route.params.item_id : 0;
         var page_id = this.$route.query.page_id ? this.$route.query.page_id : 0  ;
         
-        var url = DocConfig.server+'/api/item/info';
+        var url = DocConfig.server+'/api/item/detail/'+item_id;
 
         var params = new URLSearchParams();
         params.append('item_id',  item_id);
@@ -51,7 +51,7 @@
         if ( !that.keyword) {
           params.append('default_page_id',page_id  );
         };
-        that.axios.post(url, params)
+        that.axios.get(url, params)
           .then(function (response) {
             loading.close();
             if (response.data.error_code === 0 ) {
