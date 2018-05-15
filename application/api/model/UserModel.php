@@ -52,7 +52,7 @@ class UserModel extends Model {
 
     public function items()
     {
-        return $this->belongsToMany('ItemModel','\\app\\api\\model\\ItemMemberModel','uid','item_id');
+        return $this->belongsToMany('ItemModel','\\app\\api\\model\\ItemMemberModel','item_id','uid');
     }
 
 

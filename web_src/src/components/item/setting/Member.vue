@@ -73,17 +73,17 @@ export default {
   methods: {
 
       get_members(){
-        var that = this ;
-        var url = DocConfig.server+'/api/member/getList';
-        var params = new URLSearchParams();
+        let that = this ;
+        let url = DocConfig.server+'/api/member/'+that.$route.params.item_id;
+        let params = new URLSearchParams();
         params.append('item_id',  that.$route.params.item_id);
-        that.axios.post(url, params)
+        that.axios.get(url, params)
           .then(function (response) {
-            if (response.data.error_code === 0 ) {
-              var Info = response.data.data
+            if (response.data.status === 1 ) {
+              let Info = response.data.data;
               that.members =  Info;
             }else{
-              that.$alert(response.data.error_message);
+              that.$alert(response.data.msg);
             }
             
           })

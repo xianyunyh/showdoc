@@ -19,12 +19,19 @@ class ItemMember extends Base
     protected $itemModel;
     protected $userModel;
 
-    public function __construct(ItemMemberModel $model, ItemModel $itemModel, UserModel $userModel)
+    public function __construct( ItemModel $itemModel, UserModel $userModel)
     {
         parent::__construct();
-        $this->model = $model;
         $this->itemModel = $itemModel;
         $this->userModel = $userModel;
+    }
+
+    public function index($itemId)
+    {
+        $model = new ItemMemberModel();
+        $users = $model->getItemUsers($itemId);
+        $this->returnSuccess($users,'获取成功');
+
     }
 
     public function save()

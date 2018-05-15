@@ -19,9 +19,40 @@ class ItemMemberModel extends \think\model\Pivot
     protected $autoWriteTimestamp = true;
     protected $createTime = 'add_time';
 
-    public function  items()
+    /**
+     * 获取用户的项目
+     *
+     * @param $uid
+     * @return array|\PDOStatement|string|\think\Collection
+     */
+    public function getUserItems($uid)
     {
-        return $this->hasMany('UserModel','uid','uid');
+        if(!$uid) {
+            return [];
+        }
+        $result = $this->alias('m')
+            ->leftJoin('item i','m.item_id = i.item_id')
+            ->where('m.uid',$uid)
+            ->select();
+
+        return $result;
+    }
+
+    /**
+     * 获取项目项目下的用户列表
+     *
+     * @param $itemId
+     * @return array
+     */
+    public function getItemUsers($itemId)
+    {
+        if(empty($itemId)) {
+            return [];
+        }
+        $result = $this->alias('m')
+            ->leftJoin('user u','m.uid = u.uid')
+            ->where('m.item_id',$itemId)
+            ->select();
     }
 
 }

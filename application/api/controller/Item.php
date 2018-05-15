@@ -33,8 +33,8 @@ class Item extends Base
     public function index()
     {
         $uid = $this->request->uid;
-        $user = new UserModel();
-        $lists = $user->getItems($uid);
+        $itemModel = new ItemMemberModel();
+        $lists = $itemModel->getUserItems($uid);
         $this->returnSuccess($lists,'获取成功');
     }
 
@@ -88,7 +88,7 @@ class Item extends Base
      * 添加项目
      * @api POST /api/item
      */
-    public function save(ItemMemberModel $member)
+    public function save()
     {
         $data = $this->request->post();
 
@@ -104,6 +104,7 @@ class Item extends Base
             'uid'=>$this->request->param('uid'),
             'item_id'=>$itemId
         ];
+        $member = new ItemMemberModel();
 
         $insertRes = $member->allowField(true)->save($insertData);
         if(!$res || !$insertRes) {
