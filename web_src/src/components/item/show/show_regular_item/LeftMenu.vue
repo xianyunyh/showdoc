@@ -27,7 +27,7 @@
           </div>
 
       <!-- 一级页面 -->
-        <el-menu-item  v-if="menu.pages.length " v-for="(page ,index) in menu.pages" :index="page.page_id+'s'" :key="page.page_id" :id="index" >
+        <el-menu-item  v-if="menu.pages.length " v-for="(page ,index) in menu.pages" :index="page.page_id" :key="page.page_id" :id="index" >
           <i style="margin-left:30px;"></i>
           {{page.page_title}}
         </el-menu-item>
@@ -81,6 +81,7 @@
     },
     //选中菜单的回调
     select_menu(index, indexPath){
+      index = index.replace('s','');
       this.change_url(index);
       this.get_page_content(index);
     },

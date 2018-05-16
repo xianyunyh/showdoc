@@ -8,9 +8,7 @@
     </ShowRegularItem>
     
     <div>
-      <div @contextmenu.prevent="$refs.ctxMenu.open">
-  点击我这里打开事件
-</div>
+
       <context-menu id="context-menu" ref="ctxMenu">
       <li @click="doSomething()">option 1</li>
       <li class="disabled">option 2</li>
@@ -95,8 +93,8 @@
     }
   },
   mounted () {
-    this.getPages()
-    //this.get_item_menu();
+    //this.getPages()
+    this.get_item_menu();
 
   },
   beforeDestroy(){

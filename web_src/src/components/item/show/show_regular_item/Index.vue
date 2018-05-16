@@ -124,18 +124,18 @@
         });
       }
         var that = this ;
-        var url = DocConfig.server+'/api/page/info';
+        var url = DocConfig.server+'/api/page/info/'+page_id;
         //var loading = that.$loading({target:".page_content_main",fullscreen:false});
         var params = new URLSearchParams();
         params.append('page_id',  page_id);
-        that.axios.post(url, params)
+        that.axios.get(url, params)
           .then(function (response) {
             //loading.close();
-            if (response.data.error_code === 0 ) {
-              that.content = response.data.data.page_content ;
+            if (response.status === 1 ) {
+              that.content = response.data.page_content ;
               
-              that.page_title = response.data.data.page_title ;
-              that.page_info = response.data.data ;
+              that.page_title = response.data.page_title ;
+              that.page_info = response.data ;
               //切换变量让它重新加载、渲染子组件
               that.page_id = 0 ;
               that.$nextTick(() => {
