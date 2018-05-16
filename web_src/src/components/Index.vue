@@ -12,23 +12,14 @@
 
       <el-carousel :height="height" :autoplay="false" arrow="always">
         <el-carousel-item style="background-color: #1bbc9b;">
-
           <div class="slide">
-              <img src="static/logo/b_64.png" alt="">
+              <img src="static/logo/b_64.png" alt=""/>
               <h2>{{$t("section_title1")}}</h2>
               <p><span v-html="$t('section_description1')"></span></p>
-              <p>
-                  <a class="el-button " href="https://www.showdoc.cc/demo" target="_blank">{{$t("demo")}}</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  <a class="el-button" href="https://www.showdoc.cc/help" target="_blank" >{{$t("help")}}&nbsp;</i></a>
-              </p>
           </div>
-
         </el-carousel-item>
-
         <el-carousel-item style="background-color: #2C606A;">
-          <div class="slide">
-              <h2>{{$t("section_title2")}}</h2>
-              <p><span v-html="$t('section_description2')"></span></p>
+        <div class="slide"><h2>{{$t("section_title2")}}</h2><p><span v-html="$t('section_description2')"></span></p>
           </div>
         </el-carousel-item>
 
@@ -110,12 +101,10 @@ export default {
     this.getHeight();
     that.link = '/user/register';
     that.link_text = that.$t("index_login_or_register");
-    this.get_user_info(function(response){
-      if (response.data.error_code === 0 ) {
+    if(this.$store.state.token) {
         that.link = '/item/index';
         that.link_text = that.$t("my_item");
       }
-    });
   }
 }
 </script>

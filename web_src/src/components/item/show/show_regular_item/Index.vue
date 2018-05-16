@@ -18,7 +18,7 @@
 
             <div class="header-right">
               <!-- 登录的事情下 -->
-              <el-dropdown @command="dropdown_callback" v-if="item_info.is_login">
+              <el-dropdown @command="dropdown_callback">
                 <span class="el-dropdown-link">
                   {{$t('item')}}<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>

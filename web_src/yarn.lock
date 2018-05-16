@@ -7227,6 +7227,10 @@ vue-axios@^2.0.2:
   version "2.1.1"
   resolved "http://registry.npm.taobao.org/vue-axios/download/vue-axios-2.1.1.tgz#6167f2db93065d9bcfc90e65d063ccf34f8b1d63"
 
+vue-context-menu@^2.0.6:
+  version "2.0.6"
+  resolved "http://registry.npm.taobao.org/vue-context-menu/download/vue-context-menu-2.0.6.tgz#185107cd3ae51f25c53266a2751008fa7da4f34e"
+
 vue-hot-reload-api@^2.2.0:
   version "2.3.0"
   resolved "http://registry.npm.taobao.org/vue-hot-reload-api/download/vue-hot-reload-api-2.3.0.tgz#97976142405d13d8efae154749e88c4e358cf926"

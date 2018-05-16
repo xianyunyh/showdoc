@@ -133,9 +133,7 @@ router.beforeEach((to, from, next) => {
                 token: token
             });
         }
-        console.log(token)
         if (store.state.token || token) {  // 通过vuex state获取当前的token是否存在
-
             next();
         } else {
             next({

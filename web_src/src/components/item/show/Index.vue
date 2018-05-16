@@ -7,11 +7,16 @@
 
     </ShowRegularItem>
     
-    <!-- 展示单页项目 -->
-    <ShowSinglePageItem :item_info="item_info" v-if="item_info && item_info.item_type == 2 ">
-    
-    </ShowSinglePageItem>
-
+    <div>
+      <div @contextmenu.prevent="$refs.ctxMenu.open">
+  点击我这里打开事件
+</div>
+      <context-menu id="context-menu" ref="ctxMenu">
+      <li @click="doSomething()">option 1</li>
+      <li class="disabled">option 2</li>
+      <li>option 3</li>
+    </context-menu>
+    </div>
     <Footer> </Footer>
     
   </div>
@@ -20,8 +25,10 @@
 
 
 <script>
+  import contextMenu from 'vue-context-menu'
   import ShowRegularItem from '@/components/item/show/show_regular_item/Index'
   import ShowSinglePageItem from '@/components/item/show/show_single_page_item/Index'
+  import {getPages} from '@/api/api'
   export default {
     data() {
       return {
@@ -30,7 +37,8 @@
     },
   components:{
     ShowRegularItem,
-    ShowSinglePageItem
+    ShowSinglePageItem,
+    contextMenu
   },
   methods:{
     //获取菜单
@@ -57,24 +65,9 @@
             console.log(response)
             if (response.status === 1 ) {
               var json = response.data ;
-              if (json.default_page_id <= 0 ) {
-                if (json.menu.pages[0]) {
-                  json.default_page_id = json.menu.pages[0].page_id
-                };
-              };
-              that.item_info = json ;
-              document.title = "ShowDoc--"+that.item_info.item_name ;
-              if (json.unread_count > 0 ) {
-                that.$message({
-                  showClose: true,
-                  duration:10000,
-                  dangerouslyUseHTMLString: true,
-                  message: '<a href="#/notice/index">你有新的未读消息，点击查看</a>'
-                });
-              };
-
+              that.item_info = json
             }
-            else if (response.data.error_code === 10307 || response.data.error_code === 10303 ) {
+            else if (response.code === 10307 || response.code === 10303 ) {
               //需要输入密码
               that.$router.replace({
                   path: '/item/password/'+item_id,
@@ -94,10 +87,16 @@
     search_item(keyword){
       this.item_info = '';
       this.get_item_menu(keyword);
+    },
+    async getPages() {
+      let id = this.$route.params.item_id
+      let data = await getPages(id);
+      console.log(data);
     }
   },
   mounted () {
-    this.get_item_menu();
+    this.getPages()
+    //this.get_item_menu();
 
   },
   beforeDestroy(){

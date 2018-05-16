@@ -23,3 +23,8 @@ export const updateItem = async (id, params) => {
   let data = await axios.put('/api/item/' + id, params)
   return data
 }
+
+export const getPages = async (id) => {
+  let data = await axios.get('/api/page/' + id)
+  return data;
+}
